@@ -1,0 +1,22 @@
+version: "3"
+services:
+  nginx:
+    depends_on:
+      - frontend
+    restart: always
+    build:
+      context: ./.docker/nginx
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3055:80"
+
+  frontend:
+    stdin_open: true
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    build:
+      context: ./
+      dockerfile: .docker/app/Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - ./frontend:/app
